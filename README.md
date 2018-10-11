@@ -15,4 +15,4 @@
 2. Generate markdown doc of the problem with your submission
 
 ### Issues
-1. Add packaging tool
+<del>1. Add packaging tool</del> Webpack added
