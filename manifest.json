@@ -1,5 +1,5 @@
 {
-  "name": "LeetCodePlus",
+  "name": "LeetCode Plus",
   "version": "0.1",
   "description": "A Chrome Extension that Helps You Leetcode Better",
   "permissions": ["storage", "activeTab", "declarativeContent", "tabs"],

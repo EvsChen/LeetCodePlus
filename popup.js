@@ -1,6 +1,3 @@
-let hideInfo = document.getElementById('hideInfo');
-let showTimer = document.getElementById('showTimer');
-
 const SELECTOR = {
   DIFFICULTY_LABEL: '.difficulty-label',
   TOTAL_ACCEPTED: '.side-bar-list li:nth-child(3) span.pull-right',
@@ -35,14 +32,21 @@ function executeInCurrentTab(code) {
   });
 }
 
+const showTimer = document.getElementById('showTimer');
 showTimer.addEventListener('change', evt => {
   const ifShow = evt.target.checked;
   const code = setTimerFontSize(ifShow ? 14 : 0);
   executeInCurrentTab(code);
-})
+});
 
+const hideInfo = document.getElementById('hideInfo');
 hideInfo.addEventListener('change', evt => {
   const ifHide = evt.target.checked;
   const code = buildDisplayDOMCode(ifHide ? 'none' : 'block');
   executeInCurrentTab(code);
 });
+
+const optionLink = document.getElementById('option-link');
+optionLink.onclick = () => chrome.runtime.openOptionsPage();
+
+
