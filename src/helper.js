@@ -11,6 +11,6 @@ const secondsToStr = secondsInNumber => {
   return `${pad2Left(min)}:${pad2Left(second)}`;
 };
 
-export default {
+export {
   pad2Left, strToSeconds, secondsToStr
 };

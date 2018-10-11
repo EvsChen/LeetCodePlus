@@ -1,10 +1,5 @@
-const pad2Left = str => `0${str}`.slice(-2);
-
-const secondsToStr = secondsInNumber => {
-  const second = secondsInNumber % 60;
-  const min = (secondsInNumber - second) / 60;
-  return `${pad2Left(min)}:${pad2Left(second)}`;
-};
+import './styles/options.css';
+import { secondsToStr } from './helper';
 
 function appendRow(target, index, best) {
   const node = document.createElement('tr');

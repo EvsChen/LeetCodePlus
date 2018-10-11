@@ -1,3 +1,5 @@
+import './styles/popup.css';
+
 const SELECTOR = {
   DIFFICULTY_LABEL: '.difficulty-label',
   TOTAL_ACCEPTED: '.side-bar-list li:nth-child(3) span.pull-right',

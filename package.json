@@ -1,8 +1,22 @@
 {
-  "name": "LeetCodePlus",
-  "version": "1.0.0",
+  "name": "leetcodeplus",
+  "version": "0.0.1",
   "description": "A Chrome Extension that Helps You Leetcode Better",
   "main": "index.js",
   "author": "EvsChen <chensy1996@sjtu.edu.cn>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "clean-webpack-plugin": "^0.1.19",
+    "copy-webpack-plugin": "^4.5.3",
+    "css-loader": "^1.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "less-loader": "^4.1.0",
+    "style-loader": "^0.23.1",
+    "webpack": "^4.20.2",
+    "webpack-cli": "^3.1.2"
+  },
+  "scripts": {
+    "build": "webpack --config webpack.config.js",
+    "watch": "webpack --config webpack.config.js -w"
+  }
 }
