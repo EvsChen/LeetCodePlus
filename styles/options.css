@@ -1,0 +1,25 @@
+.storage-container {
+    display: inline-block;
+    width: 400px;
+}
+
+.storage-container h3 {
+  font-size: 20px;
+  font-family: Verdana, Geneva, sans-serif;
+  color: rgba(62, 61, 61, 0.8);
+}
+
+.storage-row {
+  font-size: 16px;
+  font-family: Georgia, serif;
+  display: block;
+  height: 30px;
+}
+
+#storage td.index {
+  width: 200px;
+}
+
+#storage td.time {
+  width: 100px
+}

@@ -1,0 +1,8 @@
+{
+  "name": "LeetCodePlus",
+  "version": "1.0.0",
+  "description": "A Chrome Extension that Helps You Leetcode Better",
+  "main": "index.js",
+  "author": "EvsChen <chensy1996@sjtu.edu.cn>",
+  "license": "MIT"
+}
