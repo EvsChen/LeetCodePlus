@@ -1,24 +1,56 @@
-import { pad2Left, strToSeconds, secondsToStr } from './helper';
-// CONST
-const SUBMIT_RESULT_STATE = {
-  ACCEPTED: 'Accepted',
-  PENDING: 'Pending',
-  JUDGING: 'Judging'
-};
+import TurndownService from 'turndown';
 
-const TIMER_ID = 'timer';
+import { pad2Left, strToSeconds, secondsToStr, $$, $new, addPrefix } from './helper';
+import { SELECTOR, TIMER_ID, AUTO_COMPLETE_ID, KEY, SUBMIT_RESULT_STATE } from './constants';
+import './styles/problem.css';
+
+const turndownService = new TurndownService();
+// the html tags that the md parser will keep unchanged
+turndownService.keep(['pre']);
+
+// turndownService.addRule('codeblock', {
+//   filter: ['pre'],
+//   replacement: content => `
+//   <pre><code>
+//     ${content}
+//   </code></pre>
+//   `
+// });
+
+// CONST
+const RECORD_ID = 'timer-record';
+const MARKDOWN_GEN_ID = 'markdown-gen';
+const BUTTON_CLASS = 'LCP_button';
+const TOOLBAR_CLASS = 'toolbar';
+const HIDER_CONTAINER_CLASS = 'hider-container';
 
 // utility
-const getProblemIndex = () => {
-  const index = document.querySelector('.question-title h3').innerText.split('.')[0];
-  return `LEETCODEPLUS_${index}`;
-}
+/**
+ * Get the dashed name of the problem
+ * @returns {string} dashedName: tree-inorder-traversal
+ */
+const getDashedProblemName = () => {
+  const problemUrl = window.location.toString();
+  return problemUrl.split('/').filter(str => str.indexOf('-') !== -1)[0];
+};
 
-const getRecordObject = index => {
+/**
+ * Get the storage key for the problem
+ */
+const getProblemIndex = () => {
+  // const index = document.querySelector('.question-title h3').innerText.split('.')[0];
+  return addPrefix(getDashedProblemName());
+};
+
+/**
+ * Get the problem object from chrome sync storage
+ * @param {string} key - storage key for the problem 
+ * @returns {Promise} promise of the object retrieval
+ */
+const getRecordObject = key => {
   return new Promise((resolve, reject) => {
-    chrome.storage.sync.get(index, res => {
-      console.log(res);
-      resolve(res[index]);
+    chrome.storage.sync.get(key, res => {
+      resolve(res[key]);
     });
   })  
 };
@@ -36,25 +68,36 @@ const setRecordObject = (index, object) => {
 
 // main 
 /**
- * @param {DOMNode} nodeToAfter - the node element to append to
+ * @param {DOMNode} nodeToAppend - the node element to append to
  * @param {string} [id = 'timer'] - id of the timer
  */
-function initTimer(nodeToAfter, id = TIMER_ID) {
+function initTimer(nodeToAppend, id = TIMER_ID) {
   const timer = document.createElement('span');
+  const mdButton = document.getElementById(MARKDOWN_GEN_ID);
   timer.innerText = '00:00';
   timer.id = id;
   const problemIndex = getProblemIndex();
   getRecordObject(problemIndex).then(record => {
-      if (record && record.best) {
+    if (record && record.best) {
       const recordNode = document.createElement('span');
       recordNode.innerText = `Best: ${secondsToStr(record.best)}`;
-      recordNode.style.color = 'green';
-      recordNode.style.marginLeft = '10px';
-      nodeToAfter.after(recordNode);
-      nodeToAfter.after(timer);
+      recordNode.id = RECORD_ID;
+      if (mdButton) {
+        mdButton.after(timer);
+        timer.after(recordNode);
+      }
+      else {
+        nodeToAppend.appendChild(timer);
+        timer.after(recordNode);
+      }
     }
     else {
-      nodeToAfter.after(timer);
+      if (mdButton) {
+        mdButton.after(timer);
+      }
+      else {
+        nodeToAppend.appendChild(timer);
+      }
     }
   });
 }
@@ -105,7 +148,9 @@ function checkSubmitResult() {
   return new Promise((resolve, reject) => {
     const interval = setInterval(() => {
       const result = document.getElementById('result-state');
-      if (result.innerText !== SUBMIT_RESULT_STATE.PENDING && result.innerText !== SUBMIT_RESULT_STATE.JUDGING) {
+      if (result && 
+          result.innerText !== SUBMIT_RESULT_STATE.PENDING && 
+          result.innerText !== SUBMIT_RESULT_STATE.JUDGING) {
         resolve(result.innerText);
         clearInterval(interval);
       }
@@ -113,12 +158,139 @@ function checkSubmitResult() {
   });
 }
 
+/**
+ * @param {DOMNode} nodeToAppend the DOM node to append the generator button
+ */
+function initMarkdownGenerator(nodeToAppend) {
+  const button = document.createElement('button')
+  button.innerText = 'Markdown ⤓';
+  button.id = MARKDOWN_GEN_ID;
+  button.className = BUTTON_CLASS;
+  button.onclick = generateMarkdown;
+  nodeToAppend.appendChild(button);
+}
+
+/**
+ * @param {string} filename - the downloaded file name
+ * @param {string} md - the complete md doc in string
+ */
+function donwloadMD(filename, md) {
+  const element = document.createElement('a');
+  element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(md));
+  element.setAttribute('download', filename);
+  element.style.display = 'none';
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
+}
+
+/**
+ * generate the markdown string 
+ * @returns {string} res - the complete md doc in string
+ */
+function generateMarkdown() {
+  const title = document.querySelector(SELECTOR.TITLE);
+  const problemUrl = window.location.toString();
+  const problemDesc = document.querySelector("div[class^='question-description']");
+  const lang = document.querySelector('.Select-value').innerText;
+  const descInMd = turndownService.turndown(problemDesc);
+  const solutionInMd = generateSolutionMd(lang);
+  let res = `
+  # [${title.innerText}](${problemUrl})
+
+  ${descInMd}
+
+  Solution in ${lang}:
+  ${solutionInMd}
+  `;
+  donwloadMD(`${getDashedProblemName()}.md`, res);
+  return res;
+}
+
+/**
+ * build the solution string in md
+ * @param {string} lang - language name of the solution, e.g. 'JavaScript'
+ */
+function generateSolutionMd(lang) {
+  const lines = document.getElementsByClassName('CodeMirror-line');
+  let res = '';
+  Array.from(lines).forEach(node => {
+    // handle unexpected red point
+    const text = String.fromCodePoint(
+      ...node.innerText.split('').map(c => c.codePointAt(0) === 160 ? 32 : c.codePointAt(0))
+    );
+    res = 
+    `${res}
+    ${text}`;
+  });
+  res = `
+  \`\`\`\`${lang.toLowerCase()}
+  ${res}
+  \`\`\`\`
+  `;
+  return res;
+}
+
+function initHider() {
+  const sidebar = document.querySelector(SELECTOR.SIDEBAR);
+  const sidebarItem = document.querySelector(`${SELECTOR.SIDEBAR} li`);
+  const buttonDiv = document.createElement('div');
+  const width = sidebarItem.offsetWidth;
+  const height = sidebarItem.offsetHeight;
+  buttonDiv.className = HIDER_CONTAINER_CLASS;
+  buttonDiv.style.width = `${width}px`;
+  buttonDiv.style.height = `${3 * height}px`;
+  buttonDiv.style.lineHeight = `${3 * height}px`;
+  buttonDiv.innerText = 'Show/Hide Difficulty';
+  buttonDiv.onclick = toggleDifficulty;
+  sidebar.prepend(buttonDiv);
+}
+
+function toggleDifficulty() {
+  const style = $$(SELECTOR.DIFFICULTY_LABEL).style.display === 'none' ? 'block' : 'none';
+  $$(SELECTOR.DIFFICULTY_LABEL).style.display = style;
+  $$(SELECTOR.TOTAL_ACCEPTED).style.display = style;
+  $$(SELECTOR.TOTAL_SUBMISSIONS).style.display = style;
+}
+
+function registerEditorEvent() {
+  const autoCompleteBox = $new('div');
+  autoCompleteBox.id = AUTO_COMPLETE_ID;
+  document.body.appendChild(autoCompleteBox);
+  const editor = $$(SELECTOR.EDITOR);
+  const box = document.getElementById(AUTO_COMPLETE_ID);
+  // editor.addEventListener('input', evt => {
+  // });
+  editor.addEventListener('keydown', evt => {
+    if (evt.key === KEY.BACKSPACE) {
+      box.style.display = 'none';
+    }
+    else {
+      // TODO: set the box position relative to the code editor
+      const { x, y } = document.getSelection().anchorNode.getBoundingClientRect();
+      box.style.display = 'block';
+      box.style.left = `${x}px`;
+      box.style.top = `${y}px`;
+    }
+  });
+}
+
+function init(afterTarget) {
+  const toolBarDiv = document.createElement('div');
+  toolBarDiv.className = TOOLBAR_CLASS;
+  afterTarget.after(toolBarDiv);
+  initMarkdownGenerator(toolBarDiv);
+  initTimer(toolBarDiv);
+  initHider();
+  // registerEditorEvent();
+  const timerInterval = runTimer();
+  registerDataSaver(timerInterval);
+}
+
 const mainInterval = setInterval(() => {
-  const title = document.querySelector('.question-title h3');
-  if (title) {
+  const afterTarget = document.querySelector(SELECTOR.LANG_SELECT);
+  if (afterTarget) {
     clearInterval(mainInterval);
-    initTimer(title);
-    const timerInterval = runTimer();
-    registerDataSaver(timerInterval);
+    init(afterTarget);
   }
 }, 500);

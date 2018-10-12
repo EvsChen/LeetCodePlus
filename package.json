@@ -18,5 +18,8 @@
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "watch": "webpack --config webpack.config.js -w"
+  },
+  "dependencies": {
+    "turndown": "^5.0.1"
   }
 }

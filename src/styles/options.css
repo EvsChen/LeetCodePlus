@@ -1,12 +1,32 @@
-.storage-container {
-    display: inline-block;
-    width: 400px;
+@import './common.css';
+
+.container {
+  padding: 20px 40px;
 }
 
-.storage-container h3 {
-  font-size: 20px;
-  font-family: Verdana, Geneva, sans-serif;
-  color: rgba(62, 61, 61, 0.8);
+.header {
+  text-align: center;
+}
+
+.panel-left {
+  height: 600px;
+  float: left;
+  padding-right: 20px;
+  border-right: 1px solid gray;
+}
+
+.panel-right {
+  overflow: hidden;
+  padding-left: 20px;
+}
+
+.logo {
+  width: 64px;
+}
+
+.storage-container {
+  display: inline-block;
+  width: 400px;
 }
 
 .storage-row {
