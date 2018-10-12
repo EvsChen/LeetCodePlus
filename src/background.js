@@ -1,4 +1,7 @@
+import { INIT_OPTIONS } from './constants';
+
 chrome.runtime.onInstalled.addListener(function() {
+  chrome.storage.sync.set(INIT_OPTIONS);
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
     chrome.declarativeContent.onPageChanged.addRules([
       {

@@ -36,10 +36,12 @@ input[type="checkbox"] {
   opacity: 0;
   z-index: -1;
 }
+
 label {
+  font-size: 14px;
   position: relative;
   display: inline-block;
-  padding: 0 0 0 2em;
+  padding: 0 0 0 3em;
   height: 1.5em;
   line-height: 1.5;
   cursor: pointer;

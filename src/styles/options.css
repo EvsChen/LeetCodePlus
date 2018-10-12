@@ -24,9 +24,14 @@
   width: 64px;
 }
 
-.storage-container {
-  display: inline-block;
+.box {
   width: 400px;
+  min-height: 200px;
+}
+
+.table-container {
+  height: 200px;
+  overflow-y: scroll;
 }
 
 .storage-row {

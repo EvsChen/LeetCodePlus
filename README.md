@@ -13,7 +13,6 @@
 ### Future plans
 
 #### v0.2
-Storage the user's default options
 
 #### v0.3
 Enhance the leetcode editor experience
@@ -27,3 +26,4 @@ Support for leetcode-cn
 * Automatic zip file
 * Add stop button for the timer
 * Record the total time spent on leetcode
+* Enable record search

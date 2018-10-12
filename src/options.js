@@ -1,5 +1,5 @@
 import './styles/options.css';
-import { secondsToStr, trimPrefix, buildUrlFromName, addPrefix } from './helper';
+import { secondsToStr, trimPrefix, buildUrlFromName, addPrefix, addOptionPrefix } from './helper';
 
 function appendRow(target, key, best) {
   const node = document.createElement('tr');
@@ -34,8 +34,18 @@ function buildTable() {
   });
 }
 
-buildTable();
+function initOptions() {
+  const optionNodes = document.querySelectorAll('.options-box input');
+  Array.from(optionNodes).forEach(input => {
+    const optionKey = addOptionPrefix(input.id);
+    chrome.storage.sync.get(optionKey, res => {
+      input.checked = res[optionKey];
+    });
+  });
+}
 
+initOptions();
+buildTable();
 // event delegator
 document.getElementById('storage').onclick = evt => {
   const target = evt.target;
@@ -47,5 +57,12 @@ document.getElementById('storage').onclick = evt => {
       buildTable();
     });
   }
-}
+};
+
+document.querySelector('.options-box').onchange = evt => {
+  const target = evt.target;
+  chrome.storage.sync.set({
+    [addOptionPrefix(target.id)]: target.checked
+  });
+};
 

@@ -1,4 +1,4 @@
-import { STORAGE_PREFIX } from './constants';
+import { STORAGE_PREFIX, OPTION_PREFIX } from './constants';
 
 const pad2Left = str => `0${str}`.slice(-2);
 
@@ -19,6 +19,8 @@ const $new = nodeName => document.createElement(nodeName);
 
 const addPrefix = str => `${STORAGE_PREFIX}${str}`;
 
+const addOptionPrefix = str => `${OPTION_PREFIX}${str}`;
+
 const trimPrefix = str => {
   if (!str.startsWith(STORAGE_PREFIX)) return str;
   return str.slice(STORAGE_PREFIX.length);
@@ -33,5 +35,6 @@ const buildUrlFromName = dashedName => `https://leetcode.com/problems/${dashedNa
 export {
   pad2Left, strToSeconds, secondsToStr,
   addPrefix, trimPrefix, buildUrlFromName,
+  addOptionPrefix,
   $$, $new
 };

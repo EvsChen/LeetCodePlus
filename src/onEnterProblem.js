@@ -1,7 +1,7 @@
 import TurndownService from 'turndown';
 
 import { pad2Left, strToSeconds, secondsToStr, $$, $new, addPrefix } from './helper';
-import { SELECTOR, TIMER_ID, AUTO_COMPLETE_ID, KEY, SUBMIT_RESULT_STATE } from './constants';
+import { SELECTOR, TIMER_ID, AUTO_COMPLETE_ID, KEY, SUBMIT_RESULT_STATE, OPTIONS_KEYS } from './constants';
 import './styles/problem.css';
 
 const turndownService = new TurndownService();
@@ -73,31 +73,19 @@ const setRecordObject = (index, object) => {
  */
 function initTimer(nodeToAppend, id = TIMER_ID) {
   const timer = document.createElement('span');
-  const mdButton = document.getElementById(MARKDOWN_GEN_ID);
   timer.innerText = '00:00';
   timer.id = id;
+  nodeToAppend.appendChild(timer);
+}
+
+function initRecord(nodeToAppend) {
   const problemIndex = getProblemIndex();
   getRecordObject(problemIndex).then(record => {
     if (record && record.best) {
       const recordNode = document.createElement('span');
       recordNode.innerText = `Best: ${secondsToStr(record.best)}`;
       recordNode.id = RECORD_ID;
-      if (mdButton) {
-        mdButton.after(timer);
-        timer.after(recordNode);
-      }
-      else {
-        nodeToAppend.appendChild(timer);
-        timer.after(recordNode);
-      }
-    }
-    else {
-      if (mdButton) {
-        mdButton.after(timer);
-      }
-      else {
-        nodeToAppend.appendChild(timer);
-      }
+      nodeToAppend.appendChild(recordNode);
     }
   });
 }
@@ -231,7 +219,10 @@ function generateSolutionMd(lang) {
   return res;
 }
 
-function initHider() {
+function initHider(ifHide) {
+  if (ifHide) {
+    toggleDifficulty();
+  }
   const sidebar = document.querySelector(SELECTOR.SIDEBAR);
   const sidebarItem = document.querySelector(`${SELECTOR.SIDEBAR} li`);
   const buttonDiv = document.createElement('div');
@@ -275,16 +266,41 @@ function registerEditorEvent() {
   });
 }
 
+/**
+ * Get the options the user set in option page
+ * @returns {Object} defaultOptions
+ */
+function getDefaultOptions() {
+  const { SHOW_BEST, SHOW_MD, SHOW_TIMER, HIDE_DIFFICULTY } = OPTIONS_KEYS;
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get(
+      [SHOW_BEST, SHOW_MD, SHOW_TIMER, HIDE_DIFFICULTY],
+      res => resolve(res)
+    );
+  });
+}
+
 function init(afterTarget) {
   const toolBarDiv = document.createElement('div');
   toolBarDiv.className = TOOLBAR_CLASS;
   afterTarget.after(toolBarDiv);
-  initMarkdownGenerator(toolBarDiv);
-  initTimer(toolBarDiv);
-  initHider();
+  getDefaultOptions()
+    .then(options => {
+      const { SHOW_BEST, SHOW_MD, SHOW_TIMER, HIDE_DIFFICULTY } = OPTIONS_KEYS;
+      if (options[SHOW_MD]) {
+        initMarkdownGenerator(toolBarDiv);
+      }
+      if (options[SHOW_TIMER]) {
+        initTimer(toolBarDiv);
+        const timerInterval = runTimer();
+        registerDataSaver(timerInterval);
+      }
+      if (options[SHOW_BEST]) {
+        initRecord(toolBarDiv);
+      }
+      initHider(options[HIDE_DIFFICULTY]);
+    });
   // registerEditorEvent();
-  const timerInterval = runTimer();
-  registerDataSaver(timerInterval);
 }
 
 const mainInterval = setInterval(() => {
