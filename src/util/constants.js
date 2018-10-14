@@ -3,6 +3,7 @@ const SELECTOR = {
   LANG_SELECT: '.language-select-wrapper',
   SIDEBAR: '.side-bar-list',
   DIFFICULTY_LABEL: '.difficulty-label',
+  PROBLEM_SET_LABEL: 'td .label',
   TOTAL_ACCEPTED: '.side-bar-list li:nth-of-type(2) span.pull-right',
   TOTAL_SUBMISSIONS: '.side-bar-list li:nth-of-type(3) span.pull-right',
   EDITOR: '.CodeMirror'
@@ -30,6 +31,7 @@ const OPTIONS_KEYS = {
   SHOW_TIMER: `${OPTION_PREFIX}showTimer`,
   SHOW_BEST: `${OPTION_PREFIX}showBest`,
   SHOW_MD: `${OPTION_PREFIX}showMd`,
+  AUTO_COMPLETE: `${OPTION_PREFIX}autoComplete`
 };
 
 const TOKEN_TYPE = {
@@ -46,7 +48,8 @@ const INIT_OPTIONS = {
   [OPTIONS_KEYS.HIDE_DIFFICULTY]: true,
   [OPTIONS_KEYS.SHOW_TIMER]: true,
   [OPTIONS_KEYS.SHOW_BEST]: true,
-  [OPTIONS_KEYS.SHOW_MD]: true 
+  [OPTIONS_KEYS.SHOW_MD]: true,
+  [OPTIONS_KEYS.AUTO_COMPLETE]: false
 };
 
 export { 

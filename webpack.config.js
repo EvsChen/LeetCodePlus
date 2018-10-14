@@ -7,6 +7,7 @@ module.exports = {
     options: './src/options.js',
     popup: './src/popup.js',
     onEnterProblem: './src/onEnterProblem.js',
+    onEnterProblemSet: './src/onEnterProblemSet.js',
     background: './src/background.js',
     editorEvent: './src/editorEvent.js'
   },

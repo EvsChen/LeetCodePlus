@@ -1,6 +1,6 @@
 {
   "name": "LeetCode Plus",
-  "version": "0.2",
+  "version": "0.3",
   "description": "LeetCode Faster and Better",
   "permissions": ["storage", "activeTab", "declarativeContent", "tabs"],
   "background": {
@@ -27,6 +27,10 @@
     {
       "matches": ["*://leetcode.com/problems/*"],
       "js": ["onEnterProblem.js"]
+    },
+    {
+      "matches": ["*://leetcode.com/problemset/*"],
+      "js": ["onEnterProblemSet.js"]
     }
   ],
   "manifest_version": 2,

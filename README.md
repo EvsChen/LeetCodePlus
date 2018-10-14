@@ -4,6 +4,7 @@
 **[View on Chrome extension store](https://chrome.google.com/webstore/detail/leetcodeplus/fcbagaohifcgechffdbbkbockfkmjiok?hl=en-US)**
 
 ### Features
+* (Beta) Auto complete!
 * Automatic timer that records your successful submission 
 * Generate markdown doc of the problem with your submission
 * Hide the difficulty info
@@ -12,18 +13,16 @@
 
 ### Future plans
 
-#### v0.2
-
-#### v0.3
-Enhance the leetcode editor experience
-
 #### v0.5
 Support for leetcode-cn
 
 ### Issues
 * <del>1. Add packaging tool</del> Webpack added
 * <del>Change storage key or display key to the link of the problem</del>
-* Automatic zip file
-* Add stop button for the timer
-* Record the total time spent on leetcode
+* Add stop button for timer
 * Enable record search
+* Split `onEnterProblem.js`
+* Change trie when editor language changes
+* Use CodeMirror built-in event listener
+* Render the hide difficulty css faster
+* ? Record the total time spent on leetcode

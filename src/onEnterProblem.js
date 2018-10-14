@@ -1,6 +1,9 @@
 import TurndownService from 'turndown';
 
-import { pad2Left, strToSeconds, secondsToStr, $$, addPrefix, execPageScript } from './util/helper';
+import {
+  pad2Left, strToSeconds, secondsToStr, $$, addPrefix,
+  execPageScript, getDefaultOptions
+} from './util/helper';
 import { SELECTOR, TIMER_ID, SUBMIT_RESULT_STATE, OPTIONS_KEYS } from './util/constants';
 import './styles/problem.css';
 
@@ -243,27 +246,14 @@ function toggleDifficulty() {
   $$(SELECTOR.TOTAL_SUBMISSIONS).style.display = style;
 }
 
-/**
- * Get the options the user set in option page
- * @returns {Object} defaultOptions
- */
-function getDefaultOptions() {
-  const { SHOW_BEST, SHOW_MD, SHOW_TIMER, HIDE_DIFFICULTY } = OPTIONS_KEYS;
-  return new Promise((resolve, reject) => {
-    chrome.storage.sync.get(
-      [SHOW_BEST, SHOW_MD, SHOW_TIMER, HIDE_DIFFICULTY],
-      res => resolve(res)
-    );
-  });
-}
-
 function init(afterTarget) {
   const toolBarDiv = document.createElement('div');
   toolBarDiv.className = TOOLBAR_CLASS;
   afterTarget.after(toolBarDiv);
   getDefaultOptions()
     .then(options => {
-      const { SHOW_BEST, SHOW_MD, SHOW_TIMER, HIDE_DIFFICULTY } = OPTIONS_KEYS;
+      const { SHOW_BEST, SHOW_MD, SHOW_TIMER, HIDE_DIFFICULTY, AUTO_COMPLETE } = OPTIONS_KEYS;
+      initHider(options[HIDE_DIFFICULTY]);
       if (options[SHOW_MD]) {
         initMarkdownGenerator(toolBarDiv);
       }
@@ -275,8 +265,9 @@ function init(afterTarget) {
       if (options[SHOW_BEST]) {
         initRecord(toolBarDiv);
       }
-      initHider(options[HIDE_DIFFICULTY]);
-      execPageScript('editorEvent.js');
+      if (options[AUTO_COMPLETE]) {
+        execPageScript('editorEvent.js');
+      }
     });
 }
 

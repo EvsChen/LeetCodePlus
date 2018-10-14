@@ -1,4 +1,4 @@
-import { STORAGE_PREFIX, OPTION_PREFIX, KEY } from './constants';
+import { STORAGE_PREFIX, OPTION_PREFIX, KEY, OPTIONS_KEYS } from './constants';
 
 const pad2Left = str => `0${str}`.slice(-2);
 
@@ -54,10 +54,25 @@ const execPageScript = filepath => {
   (document.head || document.documentElement).appendChild(s);
 }
 
+
+/**
+ * Get the options the user set in option page
+ * @returns {Object} defaultOptions
+ */
+function getDefaultOptions() {
+  const { SHOW_BEST, SHOW_MD, SHOW_TIMER, HIDE_DIFFICULTY, AUTO_COMPLETE } = OPTIONS_KEYS;
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get(
+      [SHOW_BEST, SHOW_MD, SHOW_TIMER, HIDE_DIFFICULTY, AUTO_COMPLETE],
+      res => resolve(res)
+    );
+  });
+}
+
 export {
   pad2Left, strToSeconds, secondsToStr,
   addPrefix, trimPrefix, buildUrlFromName,
   addOptionPrefix, isNumberLetter, isEditKey, isFunctionKey,
-  execPageScript,
+  execPageScript, getDefaultOptions,
   $$, $new
 };
