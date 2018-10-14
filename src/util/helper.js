@@ -1,4 +1,4 @@
-import { STORAGE_PREFIX, OPTION_PREFIX } from './constants';
+import { STORAGE_PREFIX, OPTION_PREFIX, KEY } from './constants';
 
 const pad2Left = str => `0${str}`.slice(-2);
 
@@ -26,15 +26,38 @@ const trimPrefix = str => {
   return str.slice(STORAGE_PREFIX.length);
 }
 
+const isNumberLetter = str => /^[a-z1-9A-Z]$/.test(str);
+
+const isFunctionKey = key => {
+  const functionKey = {
+    [KEY.ENTER]: true,
+    [KEY.TAB]: true,
+    [KEY.ESCAPE]: true,
+    [KEY.ARROW_UP]: true,
+    [KEY.ARROW_DOWN]: true
+  };
+  return !!functionKey[key];
+}
+
 /**
  * build problem url from dashed name
  * @param {string} dashedName - dashed name of the problem
  */
 const buildUrlFromName = dashedName => `https://leetcode.com/problems/${dashedName}/description/`;
 
+const execPageScript = filepath => {
+  const s = document.createElement('script');
+  s.src = chrome.extension.getURL(filepath);
+  s.onload = function() {
+    this.remove();
+  };
+  (document.head || document.documentElement).appendChild(s);
+}
+
 export {
   pad2Left, strToSeconds, secondsToStr,
   addPrefix, trimPrefix, buildUrlFromName,
-  addOptionPrefix,
+  addOptionPrefix, isNumberLetter, isEditKey, isFunctionKey,
+  execPageScript,
   $$, $new
 };

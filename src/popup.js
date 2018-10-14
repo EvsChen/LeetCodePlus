@@ -1,4 +1,4 @@
-import { TIMER_ID } from './constants';
+import { TIMER_ID } from './util/constants';
 import './styles/popup.css';
 
 const TIMER_FONT_SIZE = 14;

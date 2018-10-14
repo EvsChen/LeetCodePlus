@@ -1,5 +1,5 @@
 import './styles/options.css';
-import { secondsToStr, trimPrefix, buildUrlFromName, addPrefix, addOptionPrefix } from './helper';
+import { secondsToStr, trimPrefix, buildUrlFromName, addPrefix, addOptionPrefix } from './util/helper';
 
 function appendRow(target, key, best) {
   const node = document.createElement('tr');

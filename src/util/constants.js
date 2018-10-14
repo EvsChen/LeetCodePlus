@@ -10,7 +10,13 @@ const SELECTOR = {
 const TIMER_ID = 'timer';
 const AUTO_COMPLETE_ID = 'auto-complete';
 const KEY = {
-  BACKSPACE: 'Backspace'
+  ARROW_DOWN: 'ArrowDown',
+  ARROW_UP: 'ArrowUp',
+  BACKSPACE: 'Backspace',
+  ESCAPE: 'Escape',
+  ENTER: 'Enter',
+  SPACE: ' ',
+  TAB: 'Tab'
 };
 const STORAGE_PREFIX = 'LEETCODEPLUS_';
 const OPTION_PREFIX = 'LCPOPTION_';
@@ -26,6 +32,16 @@ const OPTIONS_KEYS = {
   SHOW_MD: `${OPTION_PREFIX}showMd`,
 };
 
+const TOKEN_TYPE = {
+  KEYWORD: 'keyword',
+  DEF: 'def',
+  OPERATOR: 'operator'
+};
+
+const CLASS = {
+  SELECTED_SUGGESTION_ITEM: 'selected'
+};
+
 const INIT_OPTIONS = {
   [OPTIONS_KEYS.HIDE_DIFFICULTY]: true,
   [OPTIONS_KEYS.SHOW_TIMER]: true,
@@ -36,5 +52,6 @@ const INIT_OPTIONS = {
 export { 
   SELECTOR, TIMER_ID, AUTO_COMPLETE_ID, KEY,
   STORAGE_PREFIX, OPTION_PREFIX, OPTIONS_KEYS, INIT_OPTIONS,
-  SUBMIT_RESULT_STATE
+  SUBMIT_RESULT_STATE, TOKEN_TYPE,
+  CLASS
 };

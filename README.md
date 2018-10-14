@@ -1,5 +1,5 @@
 # LeetCodePlus
-![GitHub release](https://img.shields.io/badge/Release-v0.1-green.svg)
+![GitHub release](https://img.shields.io/badge/Release-v0.2-green.svg)
 
 **[View on Chrome extension store](https://chrome.google.com/webstore/detail/leetcodeplus/fcbagaohifcgechffdbbkbockfkmjiok?hl=en-US)**
 

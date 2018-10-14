@@ -1,13 +1,12 @@
 import TurndownService from 'turndown';
 
-import { pad2Left, strToSeconds, secondsToStr, $$, $new, addPrefix } from './helper';
-import { SELECTOR, TIMER_ID, AUTO_COMPLETE_ID, KEY, SUBMIT_RESULT_STATE, OPTIONS_KEYS } from './constants';
+import { pad2Left, strToSeconds, secondsToStr, $$, addPrefix, execPageScript } from './util/helper';
+import { SELECTOR, TIMER_ID, SUBMIT_RESULT_STATE, OPTIONS_KEYS } from './util/constants';
 import './styles/problem.css';
 
 const turndownService = new TurndownService();
 // the html tags that the md parser will keep unchanged
 turndownService.keep(['pre']);
-
 // turndownService.addRule('codeblock', {
 //   filter: ['pre'],
 //   replacement: content => `
@@ -244,28 +243,6 @@ function toggleDifficulty() {
   $$(SELECTOR.TOTAL_SUBMISSIONS).style.display = style;
 }
 
-function registerEditorEvent() {
-  const autoCompleteBox = $new('div');
-  autoCompleteBox.id = AUTO_COMPLETE_ID;
-  document.body.appendChild(autoCompleteBox);
-  const editor = $$(SELECTOR.EDITOR);
-  const box = document.getElementById(AUTO_COMPLETE_ID);
-  // editor.addEventListener('input', evt => {
-  // });
-  editor.addEventListener('keydown', evt => {
-    if (evt.key === KEY.BACKSPACE) {
-      box.style.display = 'none';
-    }
-    else {
-      // TODO: set the box position relative to the code editor
-      const { x, y } = document.getSelection().anchorNode.getBoundingClientRect();
-      box.style.display = 'block';
-      box.style.left = `${x}px`;
-      box.style.top = `${y}px`;
-    }
-  });
-}
-
 /**
  * Get the options the user set in option page
  * @returns {Object} defaultOptions
@@ -299,12 +276,12 @@ function init(afterTarget) {
         initRecord(toolBarDiv);
       }
       initHider(options[HIDE_DIFFICULTY]);
+      execPageScript('editorEvent.js');
     });
-  // registerEditorEvent();
 }
 
 const mainInterval = setInterval(() => {
-  const afterTarget = document.querySelector(SELECTOR.LANG_SELECT);
+  const afterTarget = $$(SELECTOR.LANG_SELECT);
   if (afterTarget) {
     clearInterval(mainInterval);
     init(afterTarget);

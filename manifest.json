@@ -29,5 +29,8 @@
       "js": ["onEnterProblem.js"]
     }
   ],
-  "manifest_version": 2
+  "manifest_version": 2,
+  "web_accessible_resources": [
+    "editorEvent.js"
+  ]
 }

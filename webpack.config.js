@@ -7,7 +7,8 @@ module.exports = {
     options: './src/options.js',
     popup: './src/popup.js',
     onEnterProblem: './src/onEnterProblem.js',
-    background: './src/background.js'
+    background: './src/background.js',
+    editorEvent: './src/editorEvent.js'
   },
   output: {
     filename: '[name].js',
