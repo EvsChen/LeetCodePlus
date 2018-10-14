@@ -93,8 +93,8 @@ editor.addEventListener('keydown', ({key}) => {
       trie.setStartPos(pos);
     }
     sBox.fill(trie.input(key));
-    const { x, y } = document.getSelection().anchorNode.getBoundingClientRect();
+    const { left, top } = CodeMirror.cursorCoords('window');
     sBox.show();
-    sBox.setPosition(x, y);
+    sBox.setPosition(left, top);
   }
 });
