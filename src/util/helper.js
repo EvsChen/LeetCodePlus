@@ -28,6 +28,10 @@ const trimPrefix = str => {
 
 const isNumberLetter = str => /^[a-z1-9A-Z]$/.test(str);
 
+const isAllowedInVariable = char => {
+  return !/[\s;\.,\\/]/.test(char);
+};
+
 const isFunctionKey = key => {
   const functionKey = {
     [KEY.ENTER]: true,
@@ -96,7 +100,7 @@ function getDefaultOptions() {
 export {
   pad2Left, strToSeconds, secondsToStr,
   addPrefix, trimPrefix, buildUrlFromName,
-  addOptionPrefix, isNumberLetter, isEditKey, isFunctionKey,
+  addOptionPrefix, isNumberLetter, isEditKey, isFunctionKey, isAllowedInVariable,
   execPageScript, getDefaultOptions, getRecordObject, setRecordObject,
   $$, $new
 };

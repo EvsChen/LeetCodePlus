@@ -1,7 +1,7 @@
 import SuggestionBox from './util/SuggestionBox';
-import { isNumberLetter, isFunctionKey, $new, $$ } from './util/helper';
+import { isFunctionKey, isAllowedInVariable ,$new, $$ } from './util/helper';
 import Trie from './util/Trie';
-import { SELECTOR, AUTO_COMPLETE_ID, KEY, TOKEN_TYPE } from './util/constants';
+import { SELECTOR, AUTO_COMPLETE_ID, KEY, TOKEN_TYPE, MIN_ENTRY_LENGTH } from './util/constants';
 
 // init trie
 const trie = new Trie();
@@ -26,9 +26,12 @@ function parseEditorTokens() {
 
 function parseLineTokens(lineNum) {
   CodeMirror.getLineTokens(lineNum).forEach(({ type, string }) => {
-    if (type === TOKEN_TYPE.DEF || 
-        type === TOKEN_TYPE.VARIABLE ||
-        type === TOKEN_TYPE.KEYWORD) {
+    if (string.length >= MIN_ENTRY_LENGTH && (
+          type === TOKEN_TYPE.DEF || 
+          type === TOKEN_TYPE.VARIABLE ||
+          type === TOKEN_TYPE.KEYWORD ||
+          type === TOKEN_TYPE.PROPERTY
+        )) {
       trie.insert(string);
     }
   });
@@ -44,7 +47,8 @@ trie.loadLang(
 parseEditorTokens();
 
 window.addEventListener('keydown', evt => {
-  if (!sBox.isVisible) return;
+  console.log(`${evt.key} down`);
+  if (!sBox.isVisible || sBox.options.length === 0) return;
   const key = event.key;
   if (!isFunctionKey(key)) return;
   evt.preventDefault();
@@ -54,12 +58,7 @@ window.addEventListener('keydown', evt => {
     case KEY.TAB:
     {
       CodeMirror.doc.replaceRange(sBox.getSelectedText(), trie.getStartPos(), CodeMirror.getCursor());
-      sBox.hide();
-      trie.reset();
-      break;
-    }
-    case KEY.ESCAPE: {
-      sBox.hide();
+      sBox.reset();
       trie.reset();
       break;
     }
@@ -75,6 +74,9 @@ window.addEventListener('keydown', evt => {
 }, true);
 
 CodeMirror.on('optionChange', onOptionChange);
+CodeMirror.on('keyHandled', onKeyHandled);
+CodeMirror.on('inputRead', onInputRead);
+CodeMirror.on('blur', onBlur);
 
 function onOptionChange(instance, optionStr) {
   // 'mode' indicates editor language change
@@ -89,36 +91,79 @@ function onOptionChange(instance, optionStr) {
   }
 }
 
-editor.addEventListener('keydown', evt => {
-  // if any modifier key is pressed, ignore
-  if (evt.altKey || evt.ctrlKey || evt.metaKey || evt.shiftKey) return;
-  const { key } = evt;
-  if (key === KEY.BACKSPACE) {
-    sBox.hide();
-    trie.reset();
-  }
-  else if (key === KEY.SPACE) {
-    sBox.hide();
-    trie.reset();
-  }
-  else if (key === KEY.ENTER) {
-    sBox.hide();
-    trie.reset();
-    const {line, ch} = CodeMirror.getCursor();
-    parseLineTokens(line - 1);
-  }
-  // TODO: faster compare function
-  else if (isNumberLetter(key)) {
-    // TODO: set the box position relative to the code editor
-    if (!trie.hasStarted()) {
-      const pos = CodeMirror.getCursor();
-      trie.setStartPos(pos);
+function onKeyHandled(instance, name, evt) {
+  switch(name) {
+    case KEY.ENTER: {
+      sBox.reset();
+      trie.reset();
+      const {line, ch} = CodeMirror.getCursor();
+      parseLineTokens(line - 1);
+      break;
     }
-    sBox.fill(trie.input(key));
-    const { left, top } = CodeMirror.cursorCoords('window');
-    sBox.show();
-    sBox.setPosition(left, top);
+    case KEY.BACKSPACE: {
+      sBox.reset();
+      trie.reset();
+      break;
+    }
   }
-});
+}
+
+function onInputRead(instance, changeObj) {
+  const { from, to, text } = changeObj;
+  if (text.length > 1 || text.length === 0) return;
+  const char = text[0];
+  // SPACE or SEMICOLON
+  if (!isAllowedInVariable(char)) {
+    sBox.reset();
+    trie.reset();
+    return;
+  }
+  if (!trie.hasStarted()) {
+    trie.setStartPos(from);
+  }
+  sBox.fill(trie.input(char));
+  const { left, top } = CodeMirror.cursorCoords('window');
+  sBox.show();
+  sBox.setPosition(left, top);
+}
+
+function onBlur() {
+  if (sBox.isVisible) {
+    sBox.reset();
+    trie.reset();
+    CodeMirror.focus();
+  }
+}
+// editor.addEventListener('keydown', evt => {
+//   // if any modifier key is pressed, ignore
+//   if (evt.altKey || evt.ctrlKey || evt.metaKey) return;
+//   const { key } = evt;
+//   if (key === KEY.BACKSPACE) {
+//     sBox.reset();
+//     trie.reset();
+//   }
+//   else if (key === KEY.SPACE) {
+//     sBox.reset();
+//     trie.reset();
+//   }
+//   else if (key === KEY.ENTER) {
+//     sBox.reset();
+//     trie.reset();
+//     const {line, ch} = CodeMirror.getCursor();
+//     parseLineTokens(line - 1);
+//   }
+//   // TODO: faster compare function
+//   else if (isNumberLetter(key)) {
+//     // TODO: set the box position relative to the code editor
+//     if (!trie.hasStarted()) {
+//       const pos = CodeMirror.getCursor();
+//       trie.setStartPos(pos);
+//     }
+//     sBox.fill(trie.input(key));
+//     const { left, top } = CodeMirror.cursorCoords('window');
+//     sBox.show();
+//     sBox.setPosition(left, top);
+//   }
+// });
 
 console.log('editor events binded!');

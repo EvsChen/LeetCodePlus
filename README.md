@@ -17,23 +17,26 @@ Support for leetcode-cn
 ### Issues
 * <del>1. Add packaging tool</del> Webpack added
 * <del>Change storage key or display key to the link of the problem</del>
+* <del>Change trie when editor language changes</del>
+* <del>Use CodeMirror built-in event listener</del>
 * Add stop, reset button for timer
 * Enable record search
 * Split `onEnterProblem.js`
-* Change trie when editor language changes
-* Use CodeMirror built-in event listener
 * Render the hide difficulty css faster
 * ? Record the total time spent on leetcode
 
-# Auto complete issues
-* After space does not start from '', `return null`
-* parethese should from none
-* Word end with sub words(`inorder`, `inorderTraverse`)
-* Normal case arrow up down
-* Esc doesn't work
-* Words with the first few letters match
+#### Auto complete issues
 * <del>copy paste</del>
-* Handling parentheses
-* Comment mode
+* <del>After space does not start from '', `return null`</del>
+* <del>Normal case arrow up down</del>
+* <del>Esc doesn't work</del>
+* <del>Handling parentheses</del>
+* <del>dot input `this.call` => `thiscall`</del>
+* <del>Words with the first few letters match<del>
+* <del>after word end, unexpected result shown, `this` => `thisfafs`<del>
+* <del>Word end with sub words(`inorder`, `inorderTraverse`)</del>
+* Variable name should be in front of properties
+* Display suggestion type
+
 
 

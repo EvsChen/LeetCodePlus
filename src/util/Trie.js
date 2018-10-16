@@ -1,6 +1,6 @@
 
 import TrieNode from './TrieNode';
-import { EDITOR_MODES } from './constants';
+import { EDITOR_MODES, AUTO_COMPLETE_START } from './constants';
 import { JavaScript, Java, Python, Cpp } from './keywords';
 
 class Trie {
@@ -34,7 +34,6 @@ class Trie {
       default:
         langConfig = [];
     };
-    console.log(`config for ${modeName} has been loaded`);
     this.reset();
     this.root = new TrieNode();
     this.loadArr(langConfig);
@@ -57,7 +56,6 @@ class Trie {
     let node = this.root;
     for (let i = 0; i < len; i++) {
       const char = str.charAt(i);
-      node.isEnd = false;
       if (!node.children[char]) {
         node.children[char] = new TrieNode();
       }
@@ -72,15 +70,13 @@ class Trie {
   }
 
   input(char) {
+    console.log(`${char} input`);
     this.prefix += char;
     if (this.curNode) {
-      // if is end
-      if (this.curNode.isEnd) {
-        return [this.prefix];
-      }
       this.curNode = this.curNode.children[char];
       // if children[char] not exist
       if (!this.curNode) {
+        console.log('cant find child');
         return [];
       }
       return this.printSuggestions();
@@ -90,6 +86,7 @@ class Trie {
 
   printSuggestions() {
     let res = [];
+    if (this.prefix.length < AUTO_COMPLETE_START) return;
     this.recNode(res, this.curNode, this.prefix);
     return res;
   }
@@ -98,13 +95,11 @@ class Trie {
     if (node.isEnd) {
       res.push(prefix);
     }
-    else {
-      let keys = Object.keys(node.children);
-      keys.forEach(key => {
-        const newPrefix = prefix + key;
-        this.recNode(res, node.children[key], newPrefix);
-      });
-    }
+    let keys = Object.keys(node.children);
+    keys.forEach(key => {
+      const newPrefix = prefix + key;
+      this.recNode(res, node.children[key], newPrefix);
+    });
   }
 
   // TODO: better name for reset

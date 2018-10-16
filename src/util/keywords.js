@@ -1,8 +1,9 @@
 export const JavaScript = [
   'var', 'const', 'let',
   'function', 'async', 'class', 'yield',
-  'for', 'while', 'if', 'else', 'switch', 'case',
-  'try', 'catch', 'return', 'this', 'static'
+  'for', 'while', 'else', 'switch', 'case',
+  'try', 'catch', 'return', 'this', 'static',
+  'null', 'undefined'
 ];
 
 export const Python = [

@@ -28,6 +28,7 @@ class SuggestionBox {
   }
 
   moveUp() {
+    if(this.options.length === 0) return;
     const selectedIndex = this.selectedIndex
     if (selectedIndex === 0) return;
     this.options[selectedIndex].classList.remove(selectedClass);
@@ -37,6 +38,7 @@ class SuggestionBox {
   }
 
   moveDown() {
+    if(this.options.length === 0) return;
     const selectedIndex = this.selectedIndex;
     if (selectedIndex === this.options.length - 1) return;
     this.options[selectedIndex].classList.remove(selectedClass);
@@ -47,7 +49,11 @@ class SuggestionBox {
 
   fill(arr) {
     if (!this.node) return;
-    if (arr.length === 0) return;
+    if (!arr || arr.length === 0) {
+      this.clear();
+      this.hide();
+      return;
+    }
     let html = '';
     arr.forEach((word, ind) => {
       if (ind === 0) {
@@ -63,9 +69,23 @@ class SuggestionBox {
     this.selectedText = this.options[0].innerText;
   }
 
+  clear() {
+    if (this.node) {
+      this.node.innerHTML = '';
+    }
+    this.options = [];
+    this.selectedIndex = 0;
+    this.selectedText = '';
+  }
+
   hide() {
     this.node.style.display = 'none';
     this.isVisible = false;
+  }
+
+  reset() {
+    this.clear();
+    this.hide();
   }
 
   show() {
