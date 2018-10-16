@@ -56,6 +56,30 @@ const execPageScript = filepath => {
 
 
 /**
+ * Get the problem object from chrome sync storage
+ * @param {string} key - storage key for the problem 
+ * @returns {Promise} promise of the object retrieval
+ */
+const getRecordObject = key => {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.get(key, res => {
+      resolve(res[key]);
+    });
+  })  
+};
+
+const setRecordObject = (index, object) => {
+  return new Promise((resolve, reject) => {
+    chrome.storage.sync.set(
+      { [index]: object }, 
+      () => {
+        resolve();
+        console.log(`Record for ${index} has been updated`)
+    });  
+  });
+};
+
+/**
  * Get the options the user set in option page
  * @returns {Object} defaultOptions
  */
@@ -73,6 +97,6 @@ export {
   pad2Left, strToSeconds, secondsToStr,
   addPrefix, trimPrefix, buildUrlFromName,
   addOptionPrefix, isNumberLetter, isEditKey, isFunctionKey,
-  execPageScript, getDefaultOptions,
+  execPageScript, getDefaultOptions, getRecordObject, setRecordObject,
   $$, $new
 };

@@ -3,7 +3,7 @@ import { getDefaultOptions } from './util/helper';
 
 const mainInterval = setInterval(() => {
   const ths = document.querySelectorAll('th');
-  if (ths) {
+  if (ths.length > 0) {
     clearInterval(mainInterval);
     hide();
   }

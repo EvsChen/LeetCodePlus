@@ -69,8 +69,10 @@ window.addEventListener('keydown', evt => {
   }
 }, true);
 
-editor.addEventListener('keydown', ({key}) => {
-  console.log(key, 'down');
+editor.addEventListener('keydown', (evt) => {
+  // if modifier key is pressed, ignore
+  if (evt.getModifierState()) return;
+  const { key } = evt;
   if (key === KEY.BACKSPACE) {
     sBox.hide();
     trie.reset();

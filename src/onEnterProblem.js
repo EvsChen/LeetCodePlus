@@ -2,7 +2,7 @@ import TurndownService from 'turndown';
 
 import {
   pad2Left, strToSeconds, secondsToStr, $$, addPrefix,
-  execPageScript, getDefaultOptions
+  execPageScript, getDefaultOptions, getRecordObject, setRecordObject
 } from './util/helper';
 import { SELECTOR, TIMER_ID, SUBMIT_RESULT_STATE, OPTIONS_KEYS } from './util/constants';
 import './styles/problem.css';
@@ -42,30 +42,6 @@ const getDashedProblemName = () => {
 const getProblemIndex = () => {
   // const index = document.querySelector('.question-title h3').innerText.split('.')[0];
   return addPrefix(getDashedProblemName());
-};
-
-/**
- * Get the problem object from chrome sync storage
- * @param {string} key - storage key for the problem 
- * @returns {Promise} promise of the object retrieval
- */
-const getRecordObject = key => {
-  return new Promise((resolve, reject) => {
-    chrome.storage.sync.get(key, res => {
-      resolve(res[key]);
-    });
-  })  
-};
-
-const setRecordObject = (index, object) => {
-  return new Promise((resolve, reject) => {
-    chrome.storage.sync.set(
-      { [index]: object }, 
-      () => {
-        resolve();
-        console.log(`Record for ${index} has been updated`)
-    });  
-  });
 };
 
 // main 

@@ -8,8 +8,6 @@
 * Automatic timer that records your successful submission 
 * Generate markdown doc of the problem with your submission
 * Hide the difficulty info
-* Show your best time
-* Perfect matching style with leetcode.com
 
 ### Future plans
 
@@ -19,10 +17,23 @@ Support for leetcode-cn
 ### Issues
 * <del>1. Add packaging tool</del> Webpack added
 * <del>Change storage key or display key to the link of the problem</del>
-* Add stop button for timer
+* Add stop, reset button for timer
 * Enable record search
 * Split `onEnterProblem.js`
 * Change trie when editor language changes
 * Use CodeMirror built-in event listener
 * Render the hide difficulty css faster
 * ? Record the total time spent on leetcode
+
+# Auto complete issues
+* After space does not start from '', `return null`
+* parethese should from none
+* Word end with sub words(`inorder`, `inorderTraverse`)
+* Normal case arrow up down
+* Esc doesn't work
+* Words with the first few letters match
+* <del>copy paste</del>
+* Handling parentheses
+* Comment mode
+
+

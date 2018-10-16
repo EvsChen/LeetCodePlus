@@ -29,7 +29,7 @@
       "js": ["onEnterProblem.js"]
     },
     {
-      "matches": ["*://leetcode.com/problemset/*"],
+      "matches": ["*://leetcode.com/problemset/*", "*://leetcode.com/tag/*"],
       "js": ["onEnterProblemSet.js"]
     }
   ],
