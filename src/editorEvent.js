@@ -1,11 +1,10 @@
 import SuggestionBox from './util/SuggestionBox';
 import { isNumberLetter, isFunctionKey, $new, $$ } from './util/helper';
 import Trie from './util/Trie';
-import { JS_KEYWORD } from './util/keywords'
 import { SELECTOR, AUTO_COMPLETE_ID, KEY, TOKEN_TYPE } from './util/constants';
 
 // init trie
-const trie = new Trie(JS_KEYWORD);
+const trie = new Trie();
 
 // init completion box
 const autoCompleteBox = $new('div');
@@ -18,30 +17,36 @@ sBox.append(box);
 // init CodeMirror
 const editor = $$(SELECTOR.EDITOR);
 const CodeMirror = editor.CodeMirror;
-console.log(CodeMirror);
-parseInitTokens();
-
-function parseLineTokens(lineNum) {
-  const listOfTokens = CodeMirror.getLineTokens(lineNum);
-  listOfTokens.forEach(token => {
-    if (token.type === TOKEN_TYPE.DEF) {
-      trie.insert(token.string);
-    }
-  });
-}
-
-function parseInitTokens() {
+function parseEditorTokens() {
   const lineNum = CodeMirror.doc.lineCount();
   for (let i = 0; i < lineNum; i++) {
     parseLineTokens(i);
   }
 }
 
+function parseLineTokens(lineNum) {
+  CodeMirror.getLineTokens(lineNum).forEach(({ type, string }) => {
+    if (type === TOKEN_TYPE.DEF || 
+        type === TOKEN_TYPE.VARIABLE ||
+        type === TOKEN_TYPE.KEYWORD) {
+      trie.insert(string);
+    }
+  });
+}
+
+// parse init tokens
+const initMode = CodeMirror.getOption('mode');
+trie.loadLang(
+  typeof initMode === 'object'
+    ? initMode.name
+    : initMode
+);
+parseEditorTokens();
+
 window.addEventListener('keydown', evt => {
   if (!sBox.isVisible) return;
   const key = event.key;
   if (!isFunctionKey(key)) return;
-  // TODO: display better? necessary?
   evt.preventDefault();
   evt.stopPropagation();
   switch (key) {
@@ -69,9 +74,24 @@ window.addEventListener('keydown', evt => {
   }
 }, true);
 
-editor.addEventListener('keydown', (evt) => {
-  // if modifier key is pressed, ignore
-  if (evt.getModifierState()) return;
+CodeMirror.on('optionChange', onOptionChange);
+
+function onOptionChange(instance, optionStr) {
+  // 'mode' indicates editor language change
+  if (optionStr === 'mode') {
+    const newMode = CodeMirror.getOption('mode');
+    trie.loadLang(
+      typeof newMode === 'object'
+        ? newMode.name
+        : newMode
+    );
+    parseEditorTokens();
+  }
+}
+
+editor.addEventListener('keydown', evt => {
+  // if any modifier key is pressed, ignore
+  if (evt.altKey || evt.ctrlKey || evt.metaKey || evt.shiftKey) return;
   const { key } = evt;
   if (key === KEY.BACKSPACE) {
     sBox.hide();
@@ -100,3 +120,5 @@ editor.addEventListener('keydown', (evt) => {
     sBox.setPosition(left, top);
   }
 });
+
+console.log('editor events binded!');

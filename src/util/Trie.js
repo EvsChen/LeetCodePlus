@@ -1,16 +1,43 @@
 
 import TrieNode from './TrieNode';
+import { EDITOR_MODES } from './constants';
+import { JavaScript, Java, Python, Cpp } from './keywords';
 
 class Trie {
-  constructor(arr) {
+  constructor() {
     this.root = new TrieNode();
     this.prefix = '';
     this.curNode = this.root;
+  }
+
+  loadArr(arr) {
     if (arr && arr.length) {
-      arr.forEach(item => {
-        this.insert(item);
-      });
+      arr.forEach(item => this.insert(item));
     }
+  }
+
+  loadLang(modeName) {
+    let langConfig;
+    switch(modeName) {
+      case EDITOR_MODES.JAVASCRIPT:
+        langConfig = JavaScript;
+        break;
+      case EDITOR_MODES.JAVA:
+        langConfig = Java;
+        break;
+      case EDITOR_MODES.CPP:
+        langConfig = Cpp;
+        break;
+      case EDITOR_MODES.PYTHON:
+        langConfig = Python;
+        break;
+      default:
+        langConfig = [];
+    };
+    console.log(`config for ${modeName} has been loaded`);
+    this.reset();
+    this.root = new TrieNode();
+    this.loadArr(langConfig);
   }
 
   hasStarted() {
@@ -80,6 +107,7 @@ class Trie {
     }
   }
 
+  // TODO: better name for reset
   reset() {
     this.curNode = this.root;
     this.prefix = '';

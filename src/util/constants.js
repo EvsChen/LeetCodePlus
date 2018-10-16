@@ -34,9 +34,19 @@ const OPTIONS_KEYS = {
   AUTO_COMPLETE: `${OPTION_PREFIX}autoComplete`
 };
 
+const EDITOR_MODES = {
+  JAVASCRIPT: 'text/javascript',
+  PYTHON: 'text/x-python',
+  JAVA: 'text/x-java',
+  CPP: 'text/x-c++src'
+};
+
 const TOKEN_TYPE = {
   KEYWORD: 'keyword',
+  // def in js
   DEF: 'def',
+  // variable in cpp
+  VARIABLE: 'variable',
   OPERATOR: 'operator'
 };
 
@@ -49,12 +59,12 @@ const INIT_OPTIONS = {
   [OPTIONS_KEYS.SHOW_TIMER]: true,
   [OPTIONS_KEYS.SHOW_BEST]: true,
   [OPTIONS_KEYS.SHOW_MD]: true,
-  [OPTIONS_KEYS.AUTO_COMPLETE]: false
+  [OPTIONS_KEYS.AUTO_COMPLETE]: true
 };
 
 export { 
   SELECTOR, TIMER_ID, AUTO_COMPLETE_ID, KEY,
   STORAGE_PREFIX, OPTION_PREFIX, OPTIONS_KEYS, INIT_OPTIONS,
-  SUBMIT_RESULT_STATE, TOKEN_TYPE,
+  SUBMIT_RESULT_STATE, TOKEN_TYPE, EDITOR_MODES,
   CLASS
 };
