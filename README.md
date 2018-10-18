@@ -4,9 +4,10 @@
 **[View on Chrome extension store](https://chrome.google.com/webstore/detail/leetcodeplus/fcbagaohifcgechffdbbkbockfkmjiok?hl=en-US)**
 
 ### Features
-* (Beta) Auto complete!
+* (Beta) Auto complete! Just to make code faster without much suggestion
+Now supports (partial) keywords in C++, Java, Python, JavaScript
 * Automatic timer that records your successful submission 
-* Generate markdown doc of the problem with your submission
+* From code to a complete markdown doc with one click
 * Hide the difficulty info
 
 ### Future plans

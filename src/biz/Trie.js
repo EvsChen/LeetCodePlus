@@ -1,13 +1,21 @@
 
 import TrieNode from './TrieNode';
-import { EDITOR_MODES, AUTO_COMPLETE_START } from './constants';
-import { JavaScript, Java, Python, Cpp } from './keywords';
+import { AUTO_COMPLETE_START } from '../util/constants';
+import { JavaScript, Java, Python, Cpp } from '../util/keywords';
+
+const EDITOR_MODES = {
+  JAVASCRIPT: 'text/javascript',
+  PYTHON: 'text/x-python',
+  JAVA: 'text/x-java',
+  CPP: 'text/x-c++src'
+};
 
 class Trie {
   constructor() {
     this.root = new TrieNode();
     this.prefix = '';
     this.curNode = this.root;
+    window.Trie = this;
   }
 
   loadArr(arr) {
@@ -70,13 +78,11 @@ class Trie {
   }
 
   input(char) {
-    console.log(`${char} input`);
     this.prefix += char;
     if (this.curNode) {
       this.curNode = this.curNode.children[char];
       // if children[char] not exist
       if (!this.curNode) {
-        console.log('cant find child');
         return [];
       }
       return this.printSuggestions();

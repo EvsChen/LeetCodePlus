@@ -1,7 +1,19 @@
-import SuggestionBox from './util/SuggestionBox';
+import SuggestionBox from './biz/SuggestionBox';
+import Trie from './biz/Trie';
 import { isFunctionKey, isAllowedInVariable ,$new, $$ } from './util/helper';
-import Trie from './util/Trie';
-import { SELECTOR, AUTO_COMPLETE_ID, KEY, TOKEN_TYPE, MIN_ENTRY_LENGTH } from './util/constants';
+import { SELECTOR, AUTO_COMPLETE_ID, KEY, MIN_ENTRY_LENGTH } from './util/constants';
+
+const TOKEN_TYPE = {
+  KEYWORD: 'keyword',
+  // def in js
+  DEF: 'def',
+  // variable in cpp
+  VARIABLE: 'variable',
+  OPERATOR: 'operator',
+  PROPERTY: 'property',
+  TYPE: 'type',
+  BUILTIN: 'builtin'
+};
 
 // init trie
 const trie = new Trie();
@@ -30,7 +42,9 @@ function parseLineTokens(lineNum) {
           type === TOKEN_TYPE.DEF || 
           type === TOKEN_TYPE.VARIABLE ||
           type === TOKEN_TYPE.KEYWORD ||
-          type === TOKEN_TYPE.PROPERTY
+          type === TOKEN_TYPE.PROPERTY ||
+          type === TOKEN_TYPE.TYPE || 
+          type === TOKEN_TYPE.BUILTIN
         )) {
       trie.insert(string);
     }
@@ -38,16 +52,15 @@ function parseLineTokens(lineNum) {
 }
 
 // parse init tokens
-const initMode = CodeMirror.getOption('mode');
+let mode = CodeMirror.getOption('mode');
 trie.loadLang(
-  typeof initMode === 'object'
-    ? initMode.name
-    : initMode
+  typeof mode === 'object'
+    ? mode.name
+    : mode
 );
 parseEditorTokens();
 
 window.addEventListener('keydown', evt => {
-  console.log(`${evt.key} down`);
   if (!sBox.isVisible || sBox.options.length === 0) return;
   const key = event.key;
   if (!isFunctionKey(key)) return;
@@ -80,12 +93,17 @@ CodeMirror.on('blur', onBlur);
 
 function onOptionChange(instance, optionStr) {
   // 'mode' indicates editor language change
-  if (optionStr === 'mode') {
-    const newMode = CodeMirror.getOption('mode');
+  const newMode = CodeMirror.getOption('mode');
+  if (optionStr === 'mode' && newMode !== mode) {
+    // deep check the object for python2 and python3
+    if (newMode.name && newMode.name === mode.name && newMode.version === mode.version) {
+        return;
+    }
+    mode = CodeMirror.getOption('mode');
     trie.loadLang(
-      typeof newMode === 'object'
-        ? newMode.name
-        : newMode
+      typeof mode === 'object'
+        ? mode.name
+        : mode
     );
     parseEditorTokens();
   }
@@ -105,6 +123,12 @@ function onKeyHandled(instance, name, evt) {
       trie.reset();
       break;
     }
+    case 'Left':
+    case 'Right': {
+      sBox.reset();
+      trie.reset();
+      break;
+    }
   }
 }
 
@@ -118,6 +142,11 @@ function onInputRead(instance, changeObj) {
     trie.reset();
     return;
   }
+ if (/^[(){}]$/.test(char)) {
+    sBox.reset();
+    trie.reset();
+    return;
+ }
   if (!trie.hasStarted()) {
     trie.setStartPos(from);
   }

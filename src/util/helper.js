@@ -84,6 +84,17 @@ const setRecordObject = (index, object) => {
 };
 
 /**
+ * Get the dashed name of the problem
+ * @returns {string} dashedName: tree-inorder-traversal
+ */
+const getDashedProblemName = () => {
+  const problemUrl = window.location.toString();
+  return problemUrl.split('/').filter(str => str.indexOf('-') !== -1)[0];
+};
+
+const getProblemStorageKey = () => addPrefix(getDashedProblemName());
+
+/**
  * Get the options the user set in option page
  * @returns {Object} defaultOptions
  */
@@ -99,7 +110,7 @@ function getDefaultOptions() {
 
 export {
   pad2Left, strToSeconds, secondsToStr,
-  addPrefix, trimPrefix, buildUrlFromName,
+  addPrefix, trimPrefix, buildUrlFromName, getDashedProblemName, getProblemStorageKey,
   addOptionPrefix, isNumberLetter, isEditKey, isFunctionKey, isAllowedInVariable,
   execPageScript, getDefaultOptions, getRecordObject, setRecordObject,
   $$, $new

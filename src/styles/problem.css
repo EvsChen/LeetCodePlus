@@ -1,50 +1,31 @@
 .toolbar {
   display: inline-block;
   vertical-align: middle;
-  margin: 0 20px;
-  height: 36px;
+  margin-left: 5px;
+  height: 32px;
+  font-size: 12px;
 }
 
 .LCP_button {
+  margin: 0 5px;
+  display: inline-block;
+  vertical-align: middle;
+  border: 1px solid #eceff1;
+  background: transparent;
   border-radius: 5px;
   padding: 0 15px;
-  height: 36px;
-  box-shadow: 0 5px 15px 0 rgba(0,0,0,0.08);
-  transition: box-shadow .4s, -webkit-box-shadow .4s, background-color .4s;
+  height: 32px;
+  line-height: 32px;
+  transition: all .4s;
+  /* box-shadow: 0 5px 15px 0 rgba(0,0,0,0.08); */
+  /* transition: box-shadow .4s, -webkit-box-shadow .4s, background-color .4s; */
 }
 
 .LCP_button:hover {
-  box-shadow: 0 15px 30px 0 rgba(0,0,0,0.15);
-  background-color: #e6e6e6;
-}
-
-.hider-container {
-  font-size: 0;
-  position: absolute;
-  text-align: center;
-  transition: background-color .4s;
-}
-
-.hider-container:hover {
-  font-weight: 600;
-  font-size: 16px;
-  color: white;
-  background-color: rgba(0,0,0,0.5);
   cursor: pointer;
-}
-
-.hider-container button {
-  display: none;
-  height: 30px;
-  margin-top: 51px;
-}
-
-.hider-container:hover button {
-  display: inline-block;
-}
-
-.hider-container button:hover {
-  background-color: rgb(200, 200, 200);
+  border-color: #263238;
+  /* box-shadow: 0 15px 30px 0 rgba(0,0,0,0.15); */
+  /* background-color: #e6e6e6; */
 }
 
 #auto-complete {

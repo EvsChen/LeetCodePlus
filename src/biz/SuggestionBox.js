@@ -1,4 +1,4 @@
-import {CLASS} from './constants';
+import {CLASS} from '../util/constants';
 const selectedClass = CLASS.SELECTED_SUGGESTION_ITEM;
 
 class SuggestionBox {
@@ -8,6 +8,7 @@ class SuggestionBox {
     this.selectedIndex = 0;
     this.options = [];
     this.isVisible = false;
+    window.SuggestionBox = this;
   }
 
   append(node) {
