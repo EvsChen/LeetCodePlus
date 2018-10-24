@@ -1,5 +1,5 @@
 import './styles/options.css';
-import { secondsToStr, trimPrefix, buildUrlFromName, addPrefix, addOptionPrefix } from './util/helper';
+import {secondsToStr, trimPrefix, buildUrlFromName, addPrefix, addOptionPrefix} from './util/helper';
 
 function appendRow(target, key, best) {
   const node = document.createElement('tr');
@@ -24,8 +24,8 @@ function clearTable() {
 
 function buildTable() {
   const storageTable = document.getElementById('storage');
-  chrome.storage.sync.get(null, res => {
-    for (let key in res) {
+  chrome.storage.sync.get(null, (res) => {
+    for (const key in res) {
       if (key.startsWith('LEETCODEPLUS')) {
         const best = res[key].best;
         appendRow(storageTable, key, best);
@@ -36,9 +36,9 @@ function buildTable() {
 
 function initOptions() {
   const optionNodes = document.querySelectorAll('.options-box input');
-  Array.from(optionNodes).forEach(input => {
+  Array.from(optionNodes).forEach((input) => {
     const optionKey = addOptionPrefix(input.id);
-    chrome.storage.sync.get(optionKey, res => {
+    chrome.storage.sync.get(optionKey, (res) => {
       input.checked = res[optionKey];
     });
   });
@@ -47,7 +47,7 @@ function initOptions() {
 initOptions();
 buildTable();
 // event delegator
-document.getElementById('storage').onclick = evt => {
+document.getElementById('storage').onclick = (evt) => {
   const target = evt.target;
   if (target.nodeName === 'BUTTON') {
     // tr -> td -> button
@@ -59,10 +59,10 @@ document.getElementById('storage').onclick = evt => {
   }
 };
 
-document.querySelector('.options-box').onchange = evt => {
+document.querySelector('.options-box').onchange = (evt) => {
   const target = evt.target;
   chrome.storage.sync.set({
-    [addOptionPrefix(target.id)]: target.checked
+    [addOptionPrefix(target.id)]: target.checked,
   });
 };
 

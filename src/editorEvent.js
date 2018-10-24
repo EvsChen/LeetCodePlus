@@ -1,7 +1,7 @@
 import SuggestionBox from './biz/SuggestionBox';
 import Trie from './biz/Trie';
-import { isFunctionKey, isAllowedInVariable ,$new, $$ } from './util/helper';
-import { SELECTOR, AUTO_COMPLETE_ID, KEY, MIN_ENTRY_LENGTH } from './util/constants';
+import {isFunctionKey, isAllowedInVariable, $new, $$} from './util/helper';
+import {SELECTOR, AUTO_COMPLETE_ID, KEY, MIN_ENTRY_LENGTH} from './util/constants';
 
 const TOKEN_TYPE = {
   KEYWORD: 'keyword',
@@ -12,7 +12,7 @@ const TOKEN_TYPE = {
   OPERATOR: 'operator',
   PROPERTY: 'property',
   TYPE: 'type',
-  BUILTIN: 'builtin'
+  BUILTIN: 'builtin',
 };
 
 // init trie
@@ -37,15 +37,15 @@ function parseEditorTokens() {
 }
 
 function parseLineTokens(lineNum) {
-  CodeMirror.getLineTokens(lineNum).forEach(({ type, string }) => {
+  CodeMirror.getLineTokens(lineNum).forEach(({type, string}) => {
     if (string.length >= MIN_ENTRY_LENGTH && (
-          type === TOKEN_TYPE.DEF || 
+      type === TOKEN_TYPE.DEF ||
           type === TOKEN_TYPE.VARIABLE ||
           type === TOKEN_TYPE.KEYWORD ||
           type === TOKEN_TYPE.PROPERTY ||
-          type === TOKEN_TYPE.TYPE || 
+          type === TOKEN_TYPE.TYPE ||
           type === TOKEN_TYPE.BUILTIN
-        )) {
+    )) {
       trie.insert(string);
     }
   });
@@ -60,7 +60,7 @@ trie.loadLang(
 );
 parseEditorTokens();
 
-window.addEventListener('keydown', evt => {
+window.addEventListener('keydown', (evt) => {
   if (!sBox.isVisible || sBox.options.length === 0) return;
   const key = event.key;
   if (!isFunctionKey(key)) return;
@@ -97,7 +97,7 @@ function onOptionChange(instance, optionStr) {
   if (optionStr === 'mode' && newMode !== mode) {
     // deep check the object for python2 and python3
     if (newMode.name && newMode.name === mode.name && newMode.version === mode.version) {
-        return;
+      return;
     }
     mode = CodeMirror.getOption('mode');
     trie.loadLang(
@@ -110,7 +110,7 @@ function onOptionChange(instance, optionStr) {
 }
 
 function onKeyHandled(instance, name, evt) {
-  switch(name) {
+  switch (name) {
     case KEY.ENTER: {
       sBox.reset();
       trie.reset();
@@ -133,7 +133,7 @@ function onKeyHandled(instance, name, evt) {
 }
 
 function onInputRead(instance, changeObj) {
-  const { from, to, text } = changeObj;
+  const {from, to, text} = changeObj;
   if (text.length > 1 || text.length === 0) return;
   const char = text[0];
   // SPACE or SEMICOLON
@@ -142,16 +142,16 @@ function onInputRead(instance, changeObj) {
     trie.reset();
     return;
   }
- if (/^[(){}]$/.test(char)) {
+  if (/^[(){}]$/.test(char)) {
     sBox.reset();
     trie.reset();
     return;
- }
+  }
   if (!trie.hasStarted()) {
     trie.setStartPos(from);
   }
   sBox.fill(trie.input(char));
-  const { left, top } = CodeMirror.cursorCoords('window');
+  const {left, top} = CodeMirror.cursorCoords('window');
   sBox.show();
   sBox.setPosition(left, top);
 }

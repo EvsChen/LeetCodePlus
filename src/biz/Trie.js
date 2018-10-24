@@ -1,13 +1,13 @@
 
 import TrieNode from './TrieNode';
-import { AUTO_COMPLETE_START } from '../util/constants';
-import { JavaScript, Java, Python, Cpp } from '../util/keywords';
+import {AUTO_COMPLETE_START} from '../util/constants';
+import {JavaScript, Java, Python, Cpp} from '../util/keywords';
 
 const EDITOR_MODES = {
   JAVASCRIPT: 'text/javascript',
   PYTHON: 'text/x-python',
   JAVA: 'text/x-java',
-  CPP: 'text/x-c++src'
+  CPP: 'text/x-c++src',
 };
 
 class Trie {
@@ -20,13 +20,13 @@ class Trie {
 
   loadArr(arr) {
     if (arr && arr.length) {
-      arr.forEach(item => this.insert(item));
+      arr.forEach((item) => this.insert(item));
     }
   }
 
   loadLang(modeName) {
     let langConfig;
-    switch(modeName) {
+    switch (modeName) {
       case EDITOR_MODES.JAVASCRIPT:
         langConfig = JavaScript;
         break;
@@ -41,7 +41,7 @@ class Trie {
         break;
       default:
         langConfig = [];
-    };
+    }
     this.reset();
     this.root = new TrieNode();
     this.loadArr(langConfig);
@@ -91,7 +91,7 @@ class Trie {
   }
 
   printSuggestions() {
-    let res = [];
+    const res = [];
     if (this.prefix.length < AUTO_COMPLETE_START) return;
     this.recNode(res, this.curNode, this.prefix);
     return res;
@@ -101,8 +101,8 @@ class Trie {
     if (node.isEnd) {
       res.push(prefix);
     }
-    let keys = Object.keys(node.children);
-    keys.forEach(key => {
+    const keys = Object.keys(node.children);
+    keys.forEach((key) => {
       const newPrefix = prefix + key;
       this.recNode(res, node.children[key], newPrefix);
     });

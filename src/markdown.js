@@ -1,6 +1,6 @@
 import TurndownService from 'turndown';
-import { getDashedProblemName, $$ } from './util/helper';
-import { SELECTOR, BUTTON_CLASS } from './util/constants';
+import {getDashedProblemName, $$} from './util/helper';
+import {SELECTOR, BUTTON_CLASS} from './util/constants';
 
 const turndownService = new TurndownService();
 // the html tags that the md parser will keep unchanged
@@ -14,7 +14,7 @@ turndownService.keep(['pre']);
 //   `
 // });
 const MARKDOWN_GEN_ID = 'markdown-gen';
-const PROBLEM_DESC_SELECTOR = "div[class^='content']";
+const PROBLEM_DESC_SELECTOR = 'div[class^=\'content\']';
 const LANG_SELECTION_SELECTOR = '.ant-select-selection-selected-value';
 
 /**
@@ -23,7 +23,7 @@ const LANG_SELECTION_SELECTOR = '.ant-select-selection-selected-value';
 function initMarkdownGenerator(cmInstance, nodeToAppend) {
   if (!nodeToAppend) return;
   const CodeMirror = cmInstance;
-  const button = document.createElement('div')
+  const button = document.createElement('div');
   button.innerText = 'Markdown ⤓';
   button.id = MARKDOWN_GEN_ID;
   button.className = BUTTON_CLASS;
@@ -47,8 +47,8 @@ function initMarkdownGenerator(cmInstance, nodeToAppend) {
   }
 
   /**
-   * generate the markdown string 
-   * @returns {string} res - the complete md doc in string
+   * generate the markdown string
+   * @return {string} res - the complete md doc in string
    */
   function generateMarkdown() {
     const title = $$(SELECTOR.TITLE);
@@ -58,7 +58,7 @@ function initMarkdownGenerator(cmInstance, nodeToAppend) {
     const descInMd = turndownService.turndown(problemDesc);
     const solutionInMd = generateSolutionMd(lang);
     const titleText = title ? `# [${title.innerText}](${problemUrl})` : '';
-    let res = 
+    const res =
 `${titleText}
 
 ${descInMd}
@@ -69,32 +69,31 @@ ${solutionInMd}
     return res;
   }
 
-    /**
+  /**
      * build the solution string in md
      * @param {string} lang - language name of the solution, e.g. 'JavaScript'
      */
-    function generateSolutionMd(lang) {
-      const lines = document.getElementsByClassName('CodeMirror-line');
-      let res = '';
-      Array.from(lines).forEach(node => {
-        // handle unexpected red point
-        const text = String.fromCodePoint(
-          ...node.innerText.split('').map(c => c.codePointAt(0) === 160 ? 32 : c.codePointAt(0))
-        );
-        res =
+  function generateSolutionMd(lang) {
+    const lines = document.getElementsByClassName('CodeMirror-line');
+    let res = '';
+    Array.from(lines).forEach((node) => {
+      // handle unexpected red point
+      const text = String.fromCodePoint(
+          ...node.innerText.split('').map((c) => c.codePointAt(0) === 160 ? 32 : c.codePointAt(0))
+      );
+      res =
 `${res}
 ${text}`;
-      });
-      res = 
+    });
+    res =
 `\`\`\`\`${lang.toLowerCase()}
 ${res}
 \`\`\`\``;
-      return res;
-    }
+    return res;
+  }
 }
 
 
-
 export {
-  initMarkdownGenerator
+  initMarkdownGenerator,
 };

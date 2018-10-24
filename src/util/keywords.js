@@ -4,13 +4,13 @@ export const JavaScript = [
   'for', 'while', 'else', 'switch', 'case', 'typeof',
   'try', 'catch', 'return', 'this', 'static', 'catch',
   'null', 'undefined', 'true', 'false', 'continue', 'console',
-  'length'
+  'length',
 ];
 
 export const Python = [
   'class', 'def', 'self', 'None', 'return',
   'finally', 'True', 'False', 'and', 'with', 'yield',
-  'print', 'or'
+  'print', 'or',
 ];
 
 export const Cpp = [
@@ -19,11 +19,11 @@ export const Cpp = [
   'else', 'true', 'false', 'namespace',
   'return', 'sizeof', 'struct', 'template',
   'this', 'throw', 'using', 'void', 'while',
-  'define'
+  'define',
 ];
 
 export const Java = [
   'class', 'public', 'int', 'continue', 'for', 'new', 'switch',
   'boolean', 'else', 'static', 'long', 'interface', 'float',
-  'String', 'length', 'true', 'false', 'char'
+  'String', 'length', 'true', 'false', 'char',
 ];

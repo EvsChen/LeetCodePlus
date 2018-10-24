@@ -6,5 +6,7 @@ node_modules
 
 dist
 
+*.crx
+
 ## build product
 dist.zip

@@ -29,8 +29,8 @@ class SuggestionBox {
   }
 
   moveUp() {
-    if(this.options.length === 0) return;
-    const selectedIndex = this.selectedIndex
+    if (this.options.length === 0) return;
+    const selectedIndex = this.selectedIndex;
     if (selectedIndex === 0) return;
     this.options[selectedIndex].classList.remove(selectedClass);
     this.options[selectedIndex - 1].classList.add(selectedClass);
@@ -39,7 +39,7 @@ class SuggestionBox {
   }
 
   moveDown() {
-    if(this.options.length === 0) return;
+    if (this.options.length === 0) return;
     const selectedIndex = this.selectedIndex;
     if (selectedIndex === this.options.length - 1) return;
     this.options[selectedIndex].classList.remove(selectedClass);
@@ -59,8 +59,7 @@ class SuggestionBox {
     arr.forEach((word, ind) => {
       if (ind === 0) {
         html += `<div class="suggestion ${CLASS.SELECTED_SUGGESTION_ITEM}">${word}</div>`;
-      }
-      else {
+      } else {
         html += `<div class="suggestion">${word}</div>`;
       }
     });
@@ -93,7 +92,6 @@ class SuggestionBox {
     this.node.style.display = 'block';
     this.isVisible = true;
   }
-
 }
 
 export default SuggestionBox;

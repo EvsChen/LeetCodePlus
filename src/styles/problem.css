@@ -7,6 +7,7 @@
 }
 
 .LCP_button {
+  text-align: center;
   margin: 0 5px;
   display: inline-block;
   vertical-align: middle;
@@ -55,7 +56,15 @@
   vertical-align: middle;
 }
 
+#timerbox {
+  display: inline-block;
+}
+
 #timer-record {
   width: 100px;
   color: green;
+}
+
+#timer-toggle {
+  width: 45px;
 }

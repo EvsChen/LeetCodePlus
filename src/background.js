@@ -1,4 +1,4 @@
-import { INIT_OPTIONS } from './util/constants';
+import {INIT_OPTIONS} from './util/constants';
 
 chrome.runtime.onInstalled.addListener(function() {
   chrome.storage.sync.set(INIT_OPTIONS);
@@ -9,13 +9,13 @@ chrome.runtime.onInstalled.addListener(function() {
           new chrome.declarativeContent.PageStateMatcher({
             pageUrl: {
               hostContains: 'leetcode',
-              pathContains: 'problems'
+              pathContains: 'problems',
             },
-        })],
+          })],
         actions: [
-          new chrome.declarativeContent.ShowPageAction()
-        ]
-      }
+          new chrome.declarativeContent.ShowPageAction(),
+        ],
+      },
     ]);
   });
 });

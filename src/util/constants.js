@@ -1,8 +1,8 @@
 const SELECTOR = {
   TITLE: 'h1',
-  LANG_SELECT: "[class^='select']",
+  LANG_SELECT: '[class^=\'select\']',
   PROBLEM_SET_LABEL: 'td .label',
-  EDITOR: '.CodeMirror'
+  EDITOR: '.CodeMirror',
 };
 
 const BUTTON_CLASS = 'LCP_button';
@@ -17,7 +17,7 @@ const KEY = {
   ESCAPE: 'Escape',
   ENTER: 'Enter',
   SPACE: ' ',
-  TAB: 'Tab'
+  TAB: 'Tab',
 };
 const STORAGE_PREFIX = 'LEETCODEPLUS_';
 const OPTION_PREFIX = 'LCPOPTION_';
@@ -26,14 +26,14 @@ const OPTIONS_KEYS = {
   SHOW_TIMER: `${OPTION_PREFIX}showTimer`,
   SHOW_BEST: `${OPTION_PREFIX}showBest`,
   SHOW_MD: `${OPTION_PREFIX}showMd`,
-  AUTO_COMPLETE: `${OPTION_PREFIX}autoComplete`
+  AUTO_COMPLETE: `${OPTION_PREFIX}autoComplete`,
 };
 
 const MIN_ENTRY_LENGTH = 3;
 const AUTO_COMPLETE_START = 1;
 
 const CLASS = {
-  SELECTED_SUGGESTION_ITEM: 'selected'
+  SELECTED_SUGGESTION_ITEM: 'selected',
 };
 
 const INIT_OPTIONS = {
@@ -41,12 +41,12 @@ const INIT_OPTIONS = {
   [OPTIONS_KEYS.SHOW_TIMER]: true,
   [OPTIONS_KEYS.SHOW_BEST]: true,
   [OPTIONS_KEYS.SHOW_MD]: true,
-  [OPTIONS_KEYS.AUTO_COMPLETE]: true
+  [OPTIONS_KEYS.AUTO_COMPLETE]: true,
 };
 
-export { 
+export {
   SELECTOR, AUTO_COMPLETE_ID, KEY, BUTTON_CLASS,
   STORAGE_PREFIX, OPTION_PREFIX, OPTIONS_KEYS, INIT_OPTIONS,
   MIN_ENTRY_LENGTH, AUTO_COMPLETE_START,
-  CLASS
+  CLASS,
 };

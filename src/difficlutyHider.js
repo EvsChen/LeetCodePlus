@@ -1,10 +1,10 @@
-import { $$ } from './util/helper';
-import { BUTTON_CLASS } from './util/constants';
+import {$$} from './util/helper';
+import {BUTTON_CLASS} from './util/constants';
 
 const SELECTOR = {
   SIDEBAR: '.side-bar-list',
-  DIFFICULTY_LABEL: "[class^='difficulty']",
-  SUBMISSION: "[class^='submission']"
+  DIFFICULTY_LABEL: '[class^=\'difficulty\']',
+  SUBMISSION: '[class^=\'submission\']',
 };
 
 const BUTTON_ID = 'hider-button';
@@ -33,7 +33,7 @@ function toggleDifficulty() {
   const hide = difficultyLabel.style.visibility === 'hidden';
   difficultyLabel.style.visibility = hide ? 'visible' : 'hidden';
   const submissionChildren = $$(SELECTOR.SUBMISSION).children;
-  Array.from(submissionChildren).forEach(node => {
+  Array.from(submissionChildren).forEach((node) => {
     node.style.visibility = hide ? 'visible' : 'hidden';
   });
   document.getElementById(BUTTON_ID).innerText = hide ? 'Hide Difficulty' : 'Show Difficulty';
