@@ -1,6 +1,8 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const CleanWebpackPlugin = require('clean-webpack-plugin');
+const BundleAnalyzerPlugin =
+    require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CleanWebpackPlugin = require('clean-webpack-plugin');
 
 module.exports = {
   mode: 'production',
@@ -18,7 +20,7 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   plugins: [
-    // new CleanWebpackPlugin(['dist']),
+    new CleanWebpackPlugin(['dist']),
     new HtmlWebpackPlugin({
       filename: 'options.html',
       template: 'public/options.html',
@@ -33,6 +35,7 @@ module.exports = {
       {from: 'public/images', to: 'images'},
       {from: 'manifest.json', to: 'manifest.json'},
     ]),
+    new BundleAnalyzerPlugin(),
   ],
   module: {
     rules: [

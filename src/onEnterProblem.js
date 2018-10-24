@@ -13,7 +13,6 @@ const RECORD_ID = 'timer-record';
 const TOOLBAR_CLASS = 'toolbar';
 
 /**
- * 
  * @param {DOMElement} nodeToAppend
  */
 function initRecord(nodeToAppend) {
@@ -29,7 +28,6 @@ function initRecord(nodeToAppend) {
 }
 
 /**
- * 
  * @param {DOMElement} afterTarget
  */
 function init(afterTarget) {

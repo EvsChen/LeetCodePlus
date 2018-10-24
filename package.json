@@ -22,6 +22,7 @@
     "less-loader": "^4.1.0",
     "style-loader": "^0.23.1",
     "webpack": "^4.20.2",
+    "webpack-bundle-analyzer": "^3.0.3",
     "webpack-cli": "^3.1.2"
   },
   "scripts": {

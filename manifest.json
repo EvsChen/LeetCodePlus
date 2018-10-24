@@ -1,6 +1,6 @@
 {
   "name": "LeetCode Plus",
-  "version": "0.4",
+  "version": "0.5",
   "description": "LeetCode Faster and Better",
   "permissions": ["storage", "activeTab", "declarativeContent", "tabs"],
   "background": {

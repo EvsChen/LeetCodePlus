@@ -111,7 +111,7 @@ function getDefaultOptions() {
 export {
   pad2Left, strToSeconds, secondsToStr,
   addPrefix, trimPrefix, buildUrlFromName, getDashedProblemName, getProblemStorageKey,
-  addOptionPrefix, isNumberLetter, isEditKey, isFunctionKey, isAllowedInVariable,
+  addOptionPrefix, isNumberLetter, isFunctionKey, isAllowedInVariable,
   execPageScript, getDefaultOptions, getRecordObject, setRecordObject,
   $$, $new,
 };
