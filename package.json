@@ -33,6 +33,6 @@
   "dependencies": {
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
-    "turndown": "^5.0.1"
+    "turndown": "^6.0.0"
   }
 }
